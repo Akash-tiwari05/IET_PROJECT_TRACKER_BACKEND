@@ -5,13 +5,15 @@ services:
     image: mysql:8
     container_name: mysql-db
     restart: unless-stopped
+    env_file:
+      - .env
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
       MYSQL_DATABASE: projectmanagement
     ports:
       - "3306:3306"
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD", "mysql", "--user=root", "--password=${SPRING_DATASOURCE_PASSWORD}", "-e", "SHOW DATABASES;"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -25,9 +27,11 @@ services:
         condition: service_healthy
     ports:
       - "5454:5454"
+    env_file:
+      - .env
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/projectmanagement
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: root
-      SPRING_MAIL_USERNAME: myselfakashtiwari05@gmail.com
-      SPRING_MAIL_PASSWORD: fjwg jiuq ufkg pujn
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      SPRING_MAIL_USERNAME: ${SPRING_MAIL_USERNAME}
+      SPRING_MAIL_PASSWORD: ${SPRING_MAIL_PASSWORD}
