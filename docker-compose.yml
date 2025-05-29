@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: projectmanagement
+    ports:
+      - "3306:3306"
+
+  app:
+    build: .
+    container_name: project_tracker
+    depends_on:
+      - mysql
+    ports:
+      - "5454:5454"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/projectmanagement
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_MAIL_USERNAME: myselfakashtiwari05@gmail.com
+      SPRING_MAIL_PASSWORD: fjwg jiuq ufkg pujn
